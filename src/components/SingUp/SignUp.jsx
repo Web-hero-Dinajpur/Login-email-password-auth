@@ -2,7 +2,10 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Firebase/firebase.init";
 import { useState } from "react";
 
+
 const SignUp = () => {
+
+    const [success, setSuccess] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -14,6 +17,7 @@ const SignUp = () => {
 
         // reser error messege 
         setErrorMessage('');
+        setSuccess(false);
 
         if(password.length <6 ){
             setErrorMessage('Password should be 6 characters of logner');
@@ -22,11 +26,13 @@ const SignUp = () => {
 
         createUserWithEmailAndPassword(auth, email, password)
         .then(result=>{
-            console.log(result.user)
+            console.log(result.user);
+            setSuccess(true);
         })
         .catch(error =>{
             console.log('ERROR', error.message);
-            setErrorMessage(error.message)
+            setErrorMessage(error.message);
+            setSuccess(false);
         })
     }
     return (
@@ -55,7 +61,10 @@ const SignUp = () => {
                     </div>
                 </form>
                 {
-                    errorMessage && <p className="text-red-800 text-center pb-4">{errorMessage}</p>
+                    errorMessage && <p className="text-red-800 text-center">{errorMessage}</p>
+                },
+                {
+                    success && <p className="text-green-700 ml-8 text-xl">Success you Account</p>
                 }
             </div>
 
